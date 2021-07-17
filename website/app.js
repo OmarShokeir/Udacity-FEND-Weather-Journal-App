@@ -1,5 +1,5 @@
 /* Global Variables */
-const key = '&appid=a500bd39dac94198e42623a3eb722af3';
+const key = ',us&appid=a500bd39dac94198e42623a3eb722af3&units=metric';
 const url = 'http://api.openweathermap.org/data/2.5/weather?zip=';
 
 
@@ -14,7 +14,7 @@ document.getElementById('generate').addEventListener('click',function callBack()
     getWeather(key, url, zip)
     .then(function(data){
         console.log(data);
-        postData('/postProjectData',{temperature: data.getWeather, date: newDate, response: feelings});
+        postData('/add',{temperature: data.main.temp, date: newDate, response: feelings});
         updateUI();
     });
 })
@@ -54,13 +54,15 @@ const postData = async(url = ' ',data = {})=>{
 
 // Updating the UI
 const updateUI = async () =>{
-    const request = await fetch('/getProjectData');
+    const request = await fetch('/all');
     try {
         const allData = await request.json();
         document.getElementById('date').innerHTML = allData.date;
         document.getElementById('temp').innerHTML = allData.temperature;
         document.getElementById('content').innerHTML = allData.response;
         console.log(allData.date);
+        console.log(allData.temperature);
+        console.log(allData.response);
     }
     catch(error) {
         console.log("Error: ",error);

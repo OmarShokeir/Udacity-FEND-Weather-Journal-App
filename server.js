@@ -27,19 +27,18 @@ const server = app.listen(port,function listening(){
 })
 
 // GET route to return the projectData
-app.get('/getProjectData',function(req,res){
+app.get('/all',function(req,res){
     res.send(projectData);
-    console.log("Sent project data");
 });
 
 // POST route to push the data to projectData
-app.post('/postProjectData',function(req,res){
+app.post('/add',function(req,res){
     projectData = {
-        temperatue: req.body.temperatue,
+        temperature: req.body.temperature,
         date: req.body.date,
-        userRespone: req.body.userRespone
+        response: req.body.response
     }
     console.log(projectData);
-    //res.send(projectData);
+    // res.send(projectData);
 });
 

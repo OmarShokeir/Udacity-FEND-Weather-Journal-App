@@ -20,8 +20,25 @@ app.use(express.static('website'));
 
 
 // Setup Server
-const port = 8000;
+const port = 8080;
 const server = app.listen(port,function listening(){
     console.log("Server running");
     console.log("Port: " + port)
 })
+
+// GET route to return the projectData
+app.get('/getProjectData',function(req,res){
+    res.send(projectData);
+    console.log("Sent project data");
+});
+
+// POST route to push the data to projectData
+app.post('/postProjectData',function(req,res){
+    projectData = {
+        temperatue: req.body.temperatue,
+        date: req.body.date,
+        userRespone: req.body.userRespone
+    }
+    //res.send(projectData);
+});
+

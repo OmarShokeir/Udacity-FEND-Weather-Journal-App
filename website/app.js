@@ -10,18 +10,59 @@ let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 // Event listener for the button
 document.getElementById('generate').addEventListener('click',function callBack(){
     const zip = document.getElementById('zip').value;
-    getWeather(key, url, zip);
+    const feelings = document.getElementById('feelings').value;
+    getWeather(key, url, zip)
+    .then(function(data){
+        console.log(data);
+        postData('/postProjectData',{temperature: data.getWeather, date: newDate, response: feelings});
+        updateUI();
+    });
 })
 
 // Writing the asunc function
 const getWeather = async(key, url, zip)=>{
     const res = await fetch(url + zip + key);
     try {
-        const data = await res.json;
+        const data = await res.json();
         console.log(data);
+        return data;
     }
     catch(error){
         console.log("Error: ",error);
     }
+    
 }
 
+const postData = async(url = ' ',data = {})=>{
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),    
+      });
+  
+        try {
+          const newData = await response.json();
+          console.log(newData);
+          return newData
+        }catch(error) {
+        console.log("Error: ", error);
+        }
+}
+
+// Updating the UI
+const updateUI = async () =>{
+    const request = await fetch('/getProjectData');
+    try {
+        const allData = await request.json();
+        document.getElementById('date').innerHTML = allData.date;
+        document.getElementById('temp').innerHTML = allData.temperature;
+        document.getElementById('content').innerHTML = allData.response;
+        console.log(allData.date);
+    }
+    catch(error) {
+        console.log("Error: ",error);
+    }
+}
